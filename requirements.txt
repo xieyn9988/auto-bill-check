@@ -1,0 +1,14 @@
+# 核心数据处理
+pandas
+numpy
+
+# Excel 读写（pd.read_excel / to_excel 必须依赖它）
+openpyxl
+
+# 数据库连接与操作
+SQLAlchemy
+PyMySQL
+
+
+# 环境变量管理（图中代码用到了）
+python-dotenv

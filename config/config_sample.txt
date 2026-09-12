@@ -1,0 +1,63 @@
+#=====================多数据源对账系统 配置说明文档=====================
+# 使用步骤：
+# 1、在main.ipynb的【单元格2】修改下面配置
+# 2、渠道名称必须和文件映射字典中的名称保持一致
+# 3、source支持三种类型：mysql / excel / csv
+#======================================================================
+
+## 一、渠道清单配置 TARGET_CHANNEL_CONFIG
+格式：[{"name":"渠道名称","source":"数据源类型"},...]
+示例：
+[
+    {"name":"平台后台账单","source":"csv"},
+    {"name":"合作分销商台账","source":"excel"},  
+    {"name":"ERP销售订单","source":"mysql"}
+]
+
+## 二、MySQL数据库配置（source=mysql时生效）
+DB_CONFIG = {
+    "user":"root",
+    "password":"填写数据库密码",
+    "host":"127.0.0.1",
+    "port":3306,
+    "db":"ecommerce_db"
+}
+数据表要求：表名all_channel_bill，必须包含字段 order_id,amount,create_time
+
+## 三、Excel文件映射（source=excel时生效）
+# key=渠道名称，value=文件路径
+EXCEL_FILE_MAP = {
+    "合作分销商台账":"data/internal.xlsx"    
+}
+Excel要求：必须包含列 order_id、amount
+
+## 四、CSV文件映射（source=csv时生效）
+CSV_FILE_MAP = {
+    "平台后台账单":"data/channelA.csv"
+}
+CSV要求：
+1. 表头必须有 order_id,amount
+2. 编码支持 utf‑8‑sig / utf‑8 / gbk，程序自动探测
+3. 金额支持带¥、逗号、空格脏格式，程序自动清洗
+
+## 五、全局输出与日志设置
+LOG_FILE = "unified_bill_log.txt"
+# 对账报告文件名由程序运行时自动生成时间戳，无需手动指定
+
+## 六、公共字段常量（不要随意修改）
+COL_ORDER = "order_id"
+COL_AMOUNT = "amount"
+COL_TIME = "create_time"
+
+## 七、使用注意事项
+1. 文件路径建议填写相对路径，把csv/xlsx全部放入data文件夹
+2. 渠道名称前后不能有多余空格，前后名称必须统一
+3. 单个渠道加载失败程序不会崩溃，自动跳过故障渠道
+4. 每次运行自动生成带时间戳的Excel对账报告
+5. 日志文件持续追加保存全部运行记录，便于排查问题
+
+## 八、故障排查清单
+1、CSV中文乱码：优先另存为UTF‑8编码
+2、Excel无法打开：关闭正在打开的报表文件，避免文件锁定占用
+3、有效渠道不足2条无法对账：检查文件名、路径是否正确，确认文件存在
+4、MySQL连接失败：确认数据库服务启动，账号密码正确
