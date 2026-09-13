@@ -1,6 +1,6 @@
 # 多数据源电商订单自动对账系统
 
-> 基于 Python + Pandas 的多渠道订单自动对账工具，支持 MySQL / Excel / CSV 三种数据源混合对账。
+> 基于 Python + Pandas 的多渠道订单自动对账工具，支持 MySQL / Excel / CSV 三种数据源（可扩展）混合对账。
 
 ---
 
